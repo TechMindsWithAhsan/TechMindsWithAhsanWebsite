@@ -30,10 +30,11 @@ export default function HeroSection() {
         priority
         quality={70}
         sizes="100vw"
-        className="z-0 hidden object-cover opacity-60 md:block"
+        className="z-0 hidden object-cover opacity-10 md:block"
       />
       <div className="absolute inset-0 z-[1] bg-[#0A0A0A]/20" />
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0A0A0A]/10 via-transparent to-[#0A0A0A]/35" />
+      <div className="absolute inset-0 z-[3] hidden bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,0.6)_0%,rgba(10,10,10,0.4)_45%,transparent_75%)] md:block" />
 
       <div className="relative z-10 container mx-auto px-6 text-center">
         <motion.div
