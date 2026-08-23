@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -10,48 +8,8 @@ import {
   FaYoutube,
   FaGithub,
 } from "react-icons/fa";
-import { useState } from "react";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [newsletterMessage, setNewsletterMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleNewsletterSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault();
-    const normalizedEmail = email.trim().toLowerCase();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      setNewsletterMessage("Enter a valid email address.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setNewsletterMessage("");
-    try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: normalizedEmail, source: "footer" }),
-      });
-      const result = (await response.json()) as {
-        message?: string;
-        error?: string;
-      };
-      setNewsletterMessage(
-        response.ok
-          ? result.message || "Subscribed successfully."
-          : result.error || "Unable to subscribe.",
-      );
-      if (response.ok) setEmail("");
-    } catch {
-      setNewsletterMessage("Unable to subscribe right now.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <footer className="bg-[#050505] border-t border-white/5 pt-16 pb-8 relative overflow-hidden">
       {/* Decorative background elements */}
@@ -138,10 +96,10 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Connect & Newsletter */}
+          {/* Connect */}
           <div>
             <h4 className="text-white font-semibold mb-6">Connect</h4>
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4">
               <a
                 href="https://www.linkedin.com/in/techmindswithahsan/"
                 target="_blank"
@@ -201,35 +159,6 @@ export default function Footer() {
                 <FaGithub size={18} />
               </a>
             </div>
-
-            <h4 className="text-white font-semibold mb-4 text-sm">
-              Subscribe to Newsletter
-            </h4>
-            <form
-              className="flex flex-col sm:flex-row gap-2"
-              onSubmit={handleNewsletterSubmit}
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="Enter your email"
-                className="bg-[#111111] border border-white/10 rounded-md px-4 py-2 text-sm text-white focus:outline-none focus:border-sky-500 w-full"
-                required
-              />
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-sky-500 hover:bg-sky-600 text-white rounded-md px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap"
-              >
-                {isSubmitting ? "Submitting..." : "Subscribe"}
-              </button>
-            </form>
-            {newsletterMessage && (
-              <p className="mt-2 text-xs text-zinc-400" role="status">
-                {newsletterMessage}
-              </p>
-            )}
           </div>
         </div>
 

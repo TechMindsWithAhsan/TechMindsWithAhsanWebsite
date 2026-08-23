@@ -30,7 +30,7 @@ export default function HeroSection() {
         priority
         quality={70}
         sizes="100vw"
-        className="object-contain object-center opacity-70 md:object-cover md:opacity-60"
+        className="z-0 hidden object-cover opacity-60 md:block"
       />
       <div className="absolute inset-0 z-[1] bg-[#0A0A0A]/20" />
       <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0A0A0A]/10 via-transparent to-[#0A0A0A]/35" />

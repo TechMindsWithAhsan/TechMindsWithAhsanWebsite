@@ -9,7 +9,7 @@ import WhyChooseMe from "@/components/home/WhyChooseMe";
 import TechStack from "@/components/home/TechStack";
 import TestimonialsSlider from "@/components/home/TestimonialsSlider";
 import BlogPreview from "@/components/home/BlogPreview";
-import LeadCaptureForm from "@/components/home/LeadCaptureForm";
+import AssessmentCTA from "@/components/home/AssessmentCTA";
 import CTABanner from "@/components/home/CTABanner";
 
 export const metadata: Metadata = {
@@ -86,7 +86,7 @@ export default function Home() {
         <TechStack />
         <TestimonialsSlider />
         <BlogPreview />
-        <LeadCaptureForm />
+        <AssessmentCTA />
         <CTABanner />
       </main>
     </>

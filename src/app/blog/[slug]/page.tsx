@@ -10,7 +10,7 @@ import {
 } from "react-icons/fi";
 import { notFound } from "next/navigation";
 import { BLOG_POSTS } from "@/lib/blog-data";
-import LeadCaptureForm from "@/components/home/LeadCaptureForm";
+import AssessmentCTA from "@/components/home/AssessmentCTA";
 
 export async function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({
@@ -99,7 +99,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               Watch related GearLab tutorials on YouTube
             </a>
           )}
-          <LeadCaptureForm source="blog" />
+          <AssessmentCTA />
         </div>
 
         {/* Footer Actions */}

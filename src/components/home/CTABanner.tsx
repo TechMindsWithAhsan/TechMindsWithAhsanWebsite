@@ -35,7 +35,7 @@ export default function CTABanner() {
               Book a Free Strategy Call
             </Link>
             <a
-              href="https://wa.me/"
+              href="https://wa.me/923012661331"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-[#F59E0B] hover:bg-[#d97706] text-white font-bold rounded-lg transition-colors shadow-lg shadow-amber-900/50"
