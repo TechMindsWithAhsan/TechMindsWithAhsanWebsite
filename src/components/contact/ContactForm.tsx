@@ -10,6 +10,7 @@ export default function ContactForm() {
     budgetRange: "",
     projectType: "",
     message: "",
+    website: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -59,6 +60,7 @@ export default function ContactForm() {
           budgetRange: "",
           projectType: "",
           message: "",
+          website: "",
         });
       } else {
         const result = (await response.json()) as { error?: string };
@@ -90,6 +92,20 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Honeypot field for bot prevention */}
+        <div className="hidden" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            type="text"
+            id="website"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={formData.website}
+            onChange={handleChange}
+          />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label

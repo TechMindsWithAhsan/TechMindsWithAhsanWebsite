@@ -9,6 +9,7 @@ interface ContactRequest {
   budgetRange?: unknown;
   projectType?: unknown;
   message?: unknown;
+  website?: unknown;
 }
 
 const projectTypes = new Set([
@@ -30,9 +31,52 @@ const budgetRanges = new Set([
   "Not Sure Yet",
 ]);
 
+// In-memory sliding window rate limiting (max 5 requests per 10 minutes per IP)
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+const ipRateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = ipRateLimitMap.get(ip);
+
+  if (!entry || now > entry.resetTime) {
+    ipRateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  if (entry.count >= MAX_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+
+  entry.count += 1;
+  return false;
+}
+
 export async function POST(request: Request) {
   try {
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
+    if (isRateLimited(clientIp)) {
+      return NextResponse.json(
+        { error: "Too many contact requests. Please try again later." },
+        { status: 429 },
+      );
+    }
+
     const body = (await request.json()) as ContactRequest;
+
+    // Honeypot check: reject bot submissions filling the hidden website field
+    if (typeof body.website === "string" && body.website.trim().length > 0) {
+      return NextResponse.json(
+        { message: "Message received successfully." },
+        { status: 201 },
+      );
+    }
+
     const name = typeof body.name === "string" ? body.name.trim() : "";
     const email =
       typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
