@@ -28,13 +28,14 @@ export default function HeroSection() {
         alt="TechMindsWithAhsan - Building AI That Wins"
         fill
         priority
-        quality={70}
+        quality={85}
         sizes="100vw"
-        className="z-0 hidden object-cover opacity-10 md:block"
+        className="z-0 object-cover object-center opacity-45 md:opacity-55"
       />
-      <div className="absolute inset-0 z-[1] bg-[#0A0A0A]/20" />
-      <div className="absolute inset-0 z-[2] bg-gradient-to-b from-[#0A0A0A]/10 via-transparent to-[#0A0A0A]/35" />
-      <div className="absolute inset-0 z-[3] hidden bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,0.6)_0%,rgba(10,10,10,0.4)_45%,transparent_75%)] md:block" />
+      {/* Top and bottom gradient scrim for header & footer transitions */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0A0A0A]/75 via-[#0A0A0A]/35 to-[#0A0A0A]/85" />
+      {/* Center radial vignette to keep text contrast crisp */}
+      <div className="absolute inset-0 z-[2] bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,0.6)_0%,rgba(10,10,10,0.2)_50%,transparent_90%)]" />
 
       <div className="relative z-10 container mx-auto px-6 text-center">
         <motion.div
@@ -42,7 +43,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-gray-800 bg-gray-900/50 backdrop-blur-sm">
+          <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-gray-700/60 bg-gray-900/70 backdrop-blur-md shadow-lg">
             <span className="text-sm font-medium text-gray-300">
               ✦ AI Engineer · Full-Stack Developer · Tech Founder
             </span>
