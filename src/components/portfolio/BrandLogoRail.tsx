@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 
 const brands = [
@@ -26,14 +26,17 @@ const brands = [
   },
 ];
 
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 function BrandMark({ brand }: { brand: (typeof brands)[number] }) {
   const [assetIndex, setAssetIndex] = useState(0);
   const hasAsset = assetIndex < brand.assets.length;
 
   return (
-    <div className="flex h-16 min-w-[210px] items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-5 shadow-[0_8px_30px_rgba(0,0,0,0.18)] flex-shrink-0">
+    <div className="flex h-16 min-w-[210px] items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-5 shadow-[0_8px_30px_rgba(0,0,0,0.18)] flex-shrink-0 transition-all duration-300 hover:scale-[1.03] hover:border-white/20 hover:bg-white/[0.07] hover:shadow-[0_12px_35px_rgba(0,0,0,0.3)]">
       {hasAsset ? (
-        <div className="relative h-9 w-28 shrink-0">
+        <div className="relative h-9 w-28 shrink-0 opacity-85 transition-opacity duration-300 hover:opacity-100">
           <Image
             src={brand.assets[assetIndex]}
             alt={`${brand.name} logo`}
@@ -65,6 +68,7 @@ export default function BrandLogoRail() {
 
   const [singleCopyWidth, setSingleCopyWidth] = useState<number>(0);
   const [containerWidth, setContainerWidth] = useState<number>(0);
+  const [copyCount, setCopyCount] = useState<number>(6); // Default 6 copies for initial pre-paint coverage
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isIntersecting, setIsIntersecting] = useState<boolean>(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(false);
@@ -85,25 +89,33 @@ export default function BrandLogoRail() {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  // Measure container and single copy width with ResizeObserver
-  useEffect(() => {
+  // Pre-paint and continuous layout measurement with ResizeObserver
+  useIsomorphicLayoutEffect(() => {
     const containerEl = containerRef.current;
     const singleCopyEl = singleCopyRef.current;
 
     if (!containerEl || !singleCopyEl) return;
 
-    const observer = new ResizeObserver(() => {
+    const measureAndCalculate = () => {
       const cWidth = containerEl.offsetWidth;
       const sWidth = singleCopyEl.offsetWidth;
-      if (cWidth > 0) setContainerWidth(cWidth);
-      if (sWidth > 0) setSingleCopyWidth(sWidth);
-    });
 
+      if (cWidth > 0 && sWidth > 0) {
+        setContainerWidth(cWidth);
+        setSingleCopyWidth(sWidth);
+
+        // Compute needed copies to cover 2x container width with minCopies safety floor of 4
+        const MIN_COPIES = 4;
+        const needed = Math.max(MIN_COPIES, Math.ceil((cWidth * 2) / sWidth));
+        setCopyCount(needed);
+      }
+    };
+
+    measureAndCalculate();
+
+    const observer = new ResizeObserver(measureAndCalculate);
     observer.observe(containerEl);
     observer.observe(singleCopyEl);
-
-    setContainerWidth(containerEl.offsetWidth);
-    setSingleCopyWidth(singleCopyEl.offsetWidth);
 
     return () => observer.disconnect();
   }, []);
@@ -161,12 +173,6 @@ export default function BrandLogoRail() {
     };
   }, [singleCopyWidth, isHovered, isIntersecting, prefersReducedMotion]);
 
-  // Calculate needed duplicate copies to comfortably exceed 2x container width
-  const copyCount =
-    singleCopyWidth > 0 && containerWidth > 0
-      ? Math.max(2, Math.ceil((containerWidth * 2) / singleCopyWidth) + 1)
-      : 3;
-
   if (prefersReducedMotion) {
     return (
       <section
@@ -206,7 +212,7 @@ export default function BrandLogoRail() {
         </span>
       </div>
       <div
-        className="overflow-hidden px-6"
+        className="overflow-hidden px-6 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -219,7 +225,7 @@ export default function BrandLogoRail() {
           </div>
 
           {/* Subsequent duplicate copies */}
-          {Array.from({ length: copyCount - 1 }).map((_, copyIndex) => (
+          {Array.from({ length: Math.max(1, copyCount - 1) }).map((_, copyIndex) => (
             <div key={`copy-${copyIndex + 1}`} className="flex gap-4 pr-4">
               {brands.map((brand, index) => (
                 <BrandMark
