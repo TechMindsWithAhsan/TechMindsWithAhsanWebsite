@@ -74,10 +74,12 @@ export default function BrandLogoRail() {
           Selected client brands
         </span>
       </div>
-      <div className="brand-rail-track flex w-max gap-4 px-6 motion-reduce:animate-none">
-        {items.map((brand, index) => (
-          <BrandMark key={`${brand.name}-${index}`} brand={brand} />
-        ))}
+      <div className="px-6">
+        <div className="brand-rail-track flex w-max gap-4 motion-reduce:animate-none">
+          {items.map((brand, index) => (
+            <BrandMark key={`${brand.name}-${index}`} brand={brand} />
+          ))}
+        </div>
       </div>
     </section>
   );
