@@ -48,28 +48,4 @@
     content: '';
     @apply absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200;
   }
-
-  .brand-rail-track {
-    animation: brandRail 28s linear infinite;
-  }
-
-  .brand-rail-track:hover {
-    animation-play-state: paused;
-  }
-
-  @keyframes brandRail {
-    from {
-      transform: translateX(0);
-    }
-
-    to {
-      transform: translateX(calc(-50% - 0.5rem));
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .brand-rail-track {
-      animation: none;
-    }
-  }
 }
