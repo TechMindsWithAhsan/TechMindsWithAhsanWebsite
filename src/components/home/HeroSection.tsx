@@ -30,12 +30,10 @@ export default function HeroSection() {
         priority
         quality={85}
         sizes="100vw"
-        className="z-0 object-cover object-center opacity-45 md:opacity-55"
+        className="z-0 object-cover object-center"
       />
-      {/* Top and bottom gradient scrim for header & footer transitions */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0A0A0A]/75 via-[#0A0A0A]/35 to-[#0A0A0A]/85" />
-      {/* Center radial vignette to keep text contrast crisp */}
-      <div className="absolute inset-0 z-[2] bg-[radial-gradient(ellipse_at_center,rgba(10,10,10,0.6)_0%,rgba(10,10,10,0.2)_50%,transparent_90%)]" />
+      {/* Subtle vignette edges only — no darkening of the banner image itself */}
+      <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(10,10,10,0.3)_100%)]" />
 
       <div className="relative z-10 container mx-auto px-6 text-center">
         <motion.div
@@ -58,7 +56,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight text-white"
+              className="text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]"
             >
               {headlines[index]}
             </motion.h1>
@@ -69,7 +67,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 mb-10 leading-relaxed"
+          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 mb-10 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
         >
           Transforming bold ideas into intelligent digital products. From
           advanced AI automation to scalable SaaS platforms, I engineer
