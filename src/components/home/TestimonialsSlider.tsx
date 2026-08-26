@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   HiStar,
@@ -40,19 +40,14 @@ const testimonials = [
   },
 ];
 
-const VIDEO_TESTIMONIAL = {
-  youtubeId: "uP23Eu2PPh0",
-  name: "Arif",
-  role: "Owner",
-  company: "Beta Book Publishing",
-  caption:
-    "Arif, Owner of Beta Book Publishing, shares his experience working with TechMindsWithAhsan on his website build.",
-};
+const YOUTUBE_VIDEO_ID = "uP23Eu2PPh0";
+const YOUTUBE_VIDEO_URL = `https://www.youtube.com/shorts/${YOUTUBE_VIDEO_ID}`;
 
 export default function TestimonialsSlider() {
   const [current, setCurrent] = useState(0);
   const [videoMuted, setVideoMuted] = useState(true);
   const videoRef = useRef<HTMLIFrameElement>(null);
+  const userInteractedRef = useRef(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -61,21 +56,37 @@ export default function TestimonialsSlider() {
     return () => clearInterval(timer);
   }, []);
 
+  const sendYTCommand = useCallback(
+    (command: string) => {
+      videoRef.current?.contentWindow?.postMessage(
+        JSON.stringify({ event: "command", func: command, args: "" }),
+        "*",
+      );
+    },
+    [],
+  );
+
+  const toggleMute = useCallback(() => {
+    if (!videoRef.current) return;
+
+    if (videoMuted) {
+      userInteractedRef.current = true;
+      sendYTCommand("unMute");
+      sendYTCommand("playVideo");
+      setVideoMuted(false);
+    } else {
+      sendYTCommand("mute");
+      setVideoMuted(true);
+    }
+  }, [videoMuted, sendYTCommand]);
+
   const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
   const prev = () =>
     setCurrent(
       (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
 
-  const toggleMute = () => {
-    if (videoRef.current) {
-      const command = videoMuted
-        ? '{"command":"unMute"}'
-        : '{"command":"mute"}';
-      videoRef.current.contentWindow?.postMessage(command, "*");
-    }
-    setVideoMuted(!videoMuted);
-  };
+  const embedSrc = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&mute=1&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : "https://tech-minds-with-ahsan-website.vercel.app"}&loop=1&playlist=${YOUTUBE_VIDEO_ID}&controls=0&modestbranding=1&rel=0&playsinline=1`;
 
   return (
     <section className="py-24 bg-[#0A0A0A]">
@@ -95,12 +106,32 @@ export default function TestimonialsSlider() {
             <div className="relative aspect-[9/16] sm:aspect-video max-h-[500px] mx-auto w-full max-w-[320px] sm:max-w-full">
               <iframe
                 ref={videoRef}
-                src={`https://www.youtube.com/embed/${VIDEO_TESTIMONIAL.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_TESTIMONIAL.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1`}
-                title={`${VIDEO_TESTIMONIAL.name} testimonial video`}
+                src={embedSrc}
+                title="Arif testimonial video"
                 className="absolute inset-0 w-full h-full"
-                allow="autoplay; encrypted-media"
+                allow="autoplay; encrypted-media; enablejsapi"
               />
-              {/* Play / Unmute overlay */}
+
+              {/* Click-through: Watch on YouTube (top-left, above overlay) */}
+              <a
+                href={YOUTUBE_VIDEO_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs font-medium text-white transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <svg
+                  className="w-4 h-4 text-red-500 shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z" />
+                  <path d="M9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="white" />
+                </svg>
+                Watch on YouTube
+              </a>
+
+              {/* Play / Unmute overlay (center, below Watch on YouTube) */}
               <button
                 onClick={toggleMute}
                 className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors group z-10"
@@ -128,15 +159,12 @@ export default function TestimonialsSlider() {
             </div>
             <div className="p-6 text-center">
               <p className="text-gray-400 text-sm md:text-base italic">
-                {VIDEO_TESTIMONIAL.caption}
+                Arif, Owner of Beta Book Publishing, shares his experience
+                working with TechMindsWithAhsan on his website build.
               </p>
               <div className="mt-3">
-                <h4 className="text-lg font-bold text-white">
-                  {VIDEO_TESTIMONIAL.name}
-                </h4>
-                <p className="text-[#0EA5E9]">
-                  {VIDEO_TESTIMONIAL.role}, {VIDEO_TESTIMONIAL.company}
-                </p>
+                <h4 className="text-lg font-bold text-white">Arif</h4>
+                <p className="text-[#0EA5E9]">Owner, Beta Book Publishing</p>
               </div>
             </div>
           </div>
