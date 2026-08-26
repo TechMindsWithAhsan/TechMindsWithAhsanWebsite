@@ -35,8 +35,8 @@ const testimonials = [
     quote:
       "Unbelievable results achieved by TechMindsWithAhsan, helping our team scale through their services in a small period of time. High level of expertise, skills, and strategic analysis.",
     name: "Occasion Odyssey",
-    role: "Events Management & Catering",
-    company: "Karachi",
+    role: "Client",
+    company: "Events Management & Catering, Karachi",
   },
 ];
 
@@ -60,7 +60,7 @@ export default function TestimonialsSlider() {
     (command: string) => {
       videoRef.current?.contentWindow?.postMessage(
         JSON.stringify({ event: "command", func: command, args: "" }),
-        "*",
+        window.location.origin,
       );
     },
     [],
