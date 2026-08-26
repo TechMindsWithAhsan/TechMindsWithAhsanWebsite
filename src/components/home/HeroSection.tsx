@@ -24,13 +24,22 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A] pt-20 md:pt-24">
       <Image
+        src="/images/techmindswithahsan-mobile-banner.webp"
+        alt="TechMindsWithAhsan - Building AI That Wins"
+        fill
+        priority
+        quality={85}
+        sizes="100vw"
+        className="z-0 object-cover block md:hidden"
+      />
+      <Image
         src="/images/techmindswithahsan-banner.webp"
         alt="TechMindsWithAhsan - Building AI That Wins"
         fill
         priority
         quality={85}
         sizes="100vw"
-        className="z-0 object-cover object-[25%_center] sm:object-center"
+        className="z-0 object-cover hidden md:block"
       />
       {/* Subtle vignette edges only — no darkening of the banner image itself */}
       <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(10,10,10,0.3)_100%)]" />
