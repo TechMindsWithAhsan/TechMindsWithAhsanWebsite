@@ -6,12 +6,12 @@ import StatsCounter from "@/components/home/StatsCounter";
 import ServicesGrid from "@/components/home/ServicesGrid";
 import AssessmentCTA from "@/components/home/AssessmentCTA";
 
-const FlagshipProject = dynamic(() => import("@/components/home/FlagshipProject"), { ssr: false });
-const PortfolioPreview = dynamic(() => import("@/components/home/PortfolioPreview"), { ssr: false });
-const WhyChooseMe = dynamic(() => import("@/components/home/WhyChooseMe"), { ssr: false });
+const FlagshipProject = dynamic(() => import("@/components/home/FlagshipProject"));
+const PortfolioPreview = dynamic(() => import("@/components/home/PortfolioPreview"));
+const WhyChooseMe = dynamic(() => import("@/components/home/WhyChooseMe"));
 const TechStack = dynamic(() => import("@/components/home/TechStack"), { ssr: false });
-const TestimonialsSlider = dynamic(() => import("@/components/home/TestimonialsSlider"), { ssr: false });
-const BlogPreview = dynamic(() => import("@/components/home/BlogPreview"), { ssr: false });
+const TestimonialsSlider = dynamic(() => import("@/components/home/TestimonialsSlider"));
+const BlogPreview = dynamic(() => import("@/components/home/BlogPreview"));
 const CTABanner = dynamic(() => import("@/components/home/CTABanner"), { ssr: false });
 
 export const metadata: Metadata = {
