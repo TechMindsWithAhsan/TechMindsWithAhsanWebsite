@@ -30,7 +30,7 @@ export default function HeroSection() {
         priority
         quality={85}
         sizes="100vw"
-        className="z-0 object-cover block md:hidden"
+        className="z-0 object-contain block md:hidden"
       />
       <Image
         src="/images/techmindswithahsan-banner.webp"
