@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   HiStar,
@@ -42,9 +43,11 @@ const testimonials = [
 
 const YOUTUBE_VIDEO_ID = "uP23Eu2PPh0";
 const YOUTUBE_VIDEO_URL = `https://www.youtube.com/shorts/${YOUTUBE_VIDEO_ID}`;
+const THUMBNAIL_URL = `https://i.ytimg.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`;
 
 export default function TestimonialsSlider() {
   const [current, setCurrent] = useState(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoMuted, setVideoMuted] = useState(true);
   const videoRef = useRef<HTMLIFrameElement>(null);
   const userInteractedRef = useRef(false);
@@ -80,6 +83,10 @@ export default function TestimonialsSlider() {
     }
   }, [videoMuted, sendYTCommand]);
 
+  const loadVideo = useCallback(() => {
+    setVideoLoaded(true);
+  }, []);
+
   const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
   const prev = () =>
     setCurrent(
@@ -104,15 +111,37 @@ export default function TestimonialsSlider() {
         <div className="max-w-4xl mx-auto mb-16">
           <div className="bg-[#111111] border border-gray-800 rounded-3xl overflow-hidden">
             <div className="relative aspect-[9/16] sm:aspect-video max-h-[500px] mx-auto w-full max-w-[320px] sm:max-w-full">
-              <iframe
-                ref={videoRef}
-                src={embedSrc}
-                title="Arif testimonial video"
-                className="absolute inset-0 w-full h-full"
-                allow="autoplay; encrypted-media; enablejsapi"
-              />
+              {videoLoaded ? (
+                <iframe
+                  ref={videoRef}
+                  src={embedSrc}
+                  title="Arif testimonial video"
+                  className="absolute inset-0 w-full h-full"
+                  allow="autoplay; encrypted-media; enablejsapi"
+                />
+              ) : (
+                <button
+                  onClick={loadVideo}
+                  className="absolute inset-0 w-full h-full"
+                  aria-label="Play testimonial video"
+                >
+                  <Image
+                    src={THUMBNAIL_URL}
+                    alt="Arif testimonial video thumbnail"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 320px, 100%"
+                    priority
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors">
+                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-transform">
+                      <HiPlay className="w-8 h-8 text-white ml-1" />
+                    </div>
+                  </div>
+                </button>
+              )}
 
-              {/* Click-through: Watch on YouTube (top-left, above overlay) */}
+              {/* Click-through: Watch on YouTube (top-left, always visible) */}
               <a
                 href={YOUTUBE_VIDEO_URL}
                 target="_blank"
@@ -131,31 +160,33 @@ export default function TestimonialsSlider() {
                 Watch on YouTube
               </a>
 
-              {/* Play / Unmute overlay (center, below Watch on YouTube) */}
-              <button
-                onClick={toggleMute}
-                className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors group z-10"
-                aria-label={videoMuted ? "Unmute video" : "Mute video"}
-              >
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
-                    {videoMuted ? (
-                      <HiPlay className="w-8 h-8 text-white ml-1" />
-                    ) : (
-                      <svg
-                        className="w-8 h-8 text-white"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
-                      </svg>
-                    )}
+              {/* Play / Unmute overlay — only shown after iframe is mounted */}
+              {videoLoaded && (
+                <button
+                  onClick={toggleMute}
+                  className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors group z-10"
+                  aria-label={videoMuted ? "Unmute video" : "Mute video"}
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                      {videoMuted ? (
+                        <HiPlay className="w-8 h-8 text-white ml-1" />
+                      ) : (
+                        <svg
+                          className="w-8 h-8 text-white"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                        >
+                          <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-white text-sm font-medium">
+                      {videoMuted ? "Tap to unmute" : "Tap to mute"}
+                    </span>
                   </div>
-                  <span className="text-white text-sm font-medium">
-                    {videoMuted ? "Tap to unmute" : "Tap to mute"}
-                  </span>
-                </div>
-              </button>
+                </button>
+              )}
             </div>
             <div className="p-6 text-center">
               <p className="text-gray-400 text-sm md:text-base italic">
