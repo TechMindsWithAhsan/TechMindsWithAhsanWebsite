@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import Link from "next/link";
+import FadeIn from "@/components/ui/FadeIn";
 
 const features = [
   {
@@ -21,6 +22,11 @@ const features = [
 
 const techStack = ["RAG", "NLP", "Python", "Next.js", "Vector DB", "LLMs"];
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, x: 20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+};
+
 export default function FlagshipProject() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -30,12 +36,9 @@ export default function FlagshipProject() {
       <div className="absolute inset-0 bg-[#0EA5E9]/5 skew-y-3 transform origin-bottom-left" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 0.8 }}
+        <FadeIn
           className="relative p-1 rounded-3xl bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 hover:from-[#0EA5E9]/50 hover:to-[#F59E0B]/50 transition-colors duration-500"
+          duration={0.8}
         >
           <div className="bg-[#111111] rounded-[22px] p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 items-center">
             <div className="flex-1 space-y-6">
@@ -78,15 +81,14 @@ export default function FlagshipProject() {
               </div>
             </div>
 
-            <div className="flex-1 w-full grid gap-4">
+            <div ref={ref} className="flex-1 w-full grid gap-4">
               {features.map((feature, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={
-                    isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }
-                  }
-                  transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  transition={{ delay: 0.3 + idx * 0.1 }}
                   className="bg-gray-900/50 border border-gray-800 p-6 rounded-xl"
                 >
                   <h4 className="text-xl font-bold text-white mb-2">
@@ -97,7 +99,7 @@ export default function FlagshipProject() {
               ))}
             </div>
           </div>
-        </motion.div>
+        </FadeIn>
       </div>
     </section>
   );

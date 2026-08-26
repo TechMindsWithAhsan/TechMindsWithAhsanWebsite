@@ -1,7 +1,5 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import {
   HiOutlineCpuChip,
@@ -12,6 +10,8 @@ import {
   HiOutlineMagnifyingGlass,
   HiOutlinePresentationChartLine,
 } from "react-icons/hi2";
+import FadeIn from "@/components/ui/FadeIn";
+import type { Variants } from "framer-motion";
 
 const services = [
   {
@@ -58,7 +58,7 @@ const services = [
   },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -66,15 +66,12 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 export default function ServicesGrid() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="py-24 bg-[#0A0A0A]">
       <div className="container mx-auto px-6">
@@ -87,17 +84,14 @@ export default function ServicesGrid() {
           </h2>
         </div>
 
-        <motion.div
-          ref={ref}
+        <FadeIn
           variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service, index) => {
             const Icon = service.icon;
             return (
-              <motion.div
+              <FadeIn
                 key={index}
                 variants={itemVariants}
                 className="group relative p-8 rounded-2xl bg-[#111111] border border-gray-800 hover:border-gray-700 transition-all duration-300"
@@ -120,10 +114,10 @@ export default function ServicesGrid() {
                     Learn More <span className="ml-2">→</span>
                   </Link>
                 </div>
-              </motion.div>
+              </FadeIn>
             );
           })}
-        </motion.div>
+        </FadeIn>
       </div>
     </section>
   );

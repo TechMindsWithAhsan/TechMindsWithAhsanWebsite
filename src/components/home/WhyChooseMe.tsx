@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
 import { HiOutlineSparkles, HiOutlineShieldCheck, HiOutlineArrowTrendingUp, HiOutlineUserGroup } from 'react-icons/hi2';
+import FadeIn from '@/components/ui/FadeIn';
+import type { Variants } from 'framer-motion';
 
 const features = [
   {
@@ -27,10 +27,20 @@ const features = [
   }
 ];
 
-export default function WhyChooseMe() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+};
+
+export default function WhyChooseMe() {
   return (
     <section className="py-24 bg-[#0A0A0A]">
       <div className="container mx-auto px-6">
@@ -39,15 +49,13 @@ export default function WhyChooseMe() {
           <h2 className="text-3xl md:text-5xl font-bold text-white">What Sets This Partnership Apart</h2>
         </div>
 
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+        <FadeIn variants={containerVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
-              <motion.div
+              <FadeIn
                 key={idx}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                variants={itemVariants}
                 className="flex flex-col sm:flex-row gap-6 p-6 md:p-8 rounded-2xl bg-[#111111] border border-gray-800"
               >
                 <div className="flex-shrink-0">
@@ -61,10 +69,10 @@ export default function WhyChooseMe() {
                     {feature.desc}
                   </p>
                 </div>
-              </motion.div>
+              </FadeIn>
             );
           })}
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

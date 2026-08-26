@@ -1,16 +1,26 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import { BLOG_POSTS } from '@/lib/blog-data';
+import FadeIn from '@/components/ui/FadeIn';
+import type { Variants } from 'framer-motion';
 
 const posts = BLOG_POSTS.slice(0, 3);
 
-export default function BlogPreview() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+export default function BlogPreview() {
   return (
     <section className="py-24 bg-[#111111]">
       <div className="container mx-auto px-6">
@@ -29,13 +39,11 @@ export default function BlogPreview() {
           </Link>
         </div>
 
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <FadeIn variants={containerVariants} className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {posts.map((post, idx) => (
-            <motion.div
+            <FadeIn
               key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              variants={itemVariants}
               className="group bg-[#0A0A0A] border border-gray-800 rounded-2xl p-6 hover:-translate-y-2 transition-all duration-300 hover:border-gray-700 hover:shadow-xl hover:shadow-[#0EA5E9]/5"
             >
               <div className="flex justify-between items-center mb-6">
@@ -56,9 +64,9 @@ export default function BlogPreview() {
               <Link href={`/blog/${post.slug}`} className="inline-flex items-center text-sm font-semibold text-white group-hover:text-[#0EA5E9] transition-colors">
                 Read Article <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
               </Link>
-            </motion.div>
+            </FadeIn>
           ))}
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

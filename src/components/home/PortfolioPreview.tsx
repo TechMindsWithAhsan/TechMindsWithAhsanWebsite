@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import FadeIn from "@/components/ui/FadeIn";
+import type { Variants } from "framer-motion";
 
 const projects = [
   {
@@ -38,10 +38,20 @@ const projects = [
   },
 ];
 
-export default function PortfolioPreview() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+export default function PortfolioPreview() {
   return (
     <section className="py-24 bg-[#111111]">
       <div className="container mx-auto px-6">
@@ -62,16 +72,14 @@ export default function PortfolioPreview() {
           </Link>
         </div>
 
-        <div
-          ref={ref}
+        <FadeIn
+          variants={containerVariants}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
         >
           {projects.map((project, idx) => (
-            <motion.div
+            <FadeIn
               key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              variants={itemVariants}
               className="group relative h-80 rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10" />
@@ -125,9 +133,9 @@ export default function PortfolioPreview() {
                   View Details
                 </Link>
               </div>
-            </motion.div>
+            </FadeIn>
           ))}
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

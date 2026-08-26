@@ -1,16 +1,18 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/home/HeroSection";
 import BrandLogoRail from "@/components/portfolio/BrandLogoRail";
 import StatsCounter from "@/components/home/StatsCounter";
 import ServicesGrid from "@/components/home/ServicesGrid";
-import FlagshipProject from "@/components/home/FlagshipProject";
-import PortfolioPreview from "@/components/home/PortfolioPreview";
-import WhyChooseMe from "@/components/home/WhyChooseMe";
-import TechStack from "@/components/home/TechStack";
-import TestimonialsSlider from "@/components/home/TestimonialsSlider";
-import BlogPreview from "@/components/home/BlogPreview";
 import AssessmentCTA from "@/components/home/AssessmentCTA";
-import CTABanner from "@/components/home/CTABanner";
+
+const FlagshipProject = dynamic(() => import("@/components/home/FlagshipProject"), { ssr: false });
+const PortfolioPreview = dynamic(() => import("@/components/home/PortfolioPreview"), { ssr: false });
+const WhyChooseMe = dynamic(() => import("@/components/home/WhyChooseMe"), { ssr: false });
+const TechStack = dynamic(() => import("@/components/home/TechStack"), { ssr: false });
+const TestimonialsSlider = dynamic(() => import("@/components/home/TestimonialsSlider"), { ssr: false });
+const BlogPreview = dynamic(() => import("@/components/home/BlogPreview"), { ssr: false });
+const CTABanner = dynamic(() => import("@/components/home/CTABanner"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "TechMindsWithAhsan | AI Engineering & Custom Web Development",

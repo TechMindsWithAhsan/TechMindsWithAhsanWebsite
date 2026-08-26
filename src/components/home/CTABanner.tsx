@@ -1,22 +1,15 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
+import FadeIn from '@/components/ui/FadeIn';
 
 export default function CTABanner() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="py-20 bg-[#111111] border-t border-gray-900">
       <div className="container mx-auto px-6">
-        <motion.div 
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8 }}
+        <FadeIn
           className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-10 md:p-16 text-center border border-gray-800 relative overflow-hidden"
+          duration={0.8}
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0EA5E9] to-[#F59E0B]" />
           
@@ -43,7 +36,7 @@ export default function CTABanner() {
               Chat on WhatsApp
             </a>
           </div>
-        </motion.div>
+        </FadeIn>
       </div>
     </section>
   );

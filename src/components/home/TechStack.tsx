@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import FadeIn from '@/components/ui/FadeIn';
+import type { Variants } from 'framer-motion';
 
 const categories = [
   {
@@ -26,10 +26,20 @@ const categories = [
   }
 ];
 
-export default function TechStack() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 },
+  },
+};
 
+const itemVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
+};
+
+export default function TechStack() {
   return (
     <section className="py-24 bg-[#111111] border-y border-gray-900">
       <div className="container mx-auto px-6">
@@ -40,25 +50,23 @@ export default function TechStack() {
           </h2>
         </div>
 
-        <div ref={ref} className="max-w-6xl mx-auto flex flex-col gap-12">
+        <div className="max-w-6xl mx-auto flex flex-col gap-12">
           {categories.map((category, idx) => (
             <div key={idx} className="flex flex-col md:flex-row items-start md:items-center gap-6">
               <div className="md:w-64 flex-shrink-0">
                 <h4 className="text-lg font-bold text-gray-300">{category.name}</h4>
               </div>
-              <div className="flex flex-wrap gap-3 flex-1">
-                {category.techs.map((tech, techIdx) => (
-                  <motion.div
-                    key={techIdx}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.4, delay: (idx * 0.1) + (techIdx * 0.05) }}
+              <FadeIn variants={containerVariants} className="flex flex-wrap gap-3 flex-1">
+                {category.techs.map((tech) => (
+                  <FadeIn
+                    key={tech}
+                    variants={itemVariants}
                     className="px-4 py-2 bg-gray-900 border border-gray-800 rounded-full text-sm font-medium text-gray-300 hover:border-[#0EA5E9] hover:text-white transition-colors cursor-default"
                   >
                     {tech}
-                  </motion.div>
+                  </FadeIn>
                 ))}
-              </div>
+              </FadeIn>
             </div>
           ))}
         </div>
