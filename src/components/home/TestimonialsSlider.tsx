@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiStar, HiChevronLeft, HiChevronRight } from "react-icons/hi2";
+import {
+  HiStar,
+  HiChevronLeft,
+  HiChevronRight,
+  HiPlay,
+} from "react-icons/hi2";
 
 const testimonials = [
   {
@@ -35,8 +40,19 @@ const testimonials = [
   },
 ];
 
+const VIDEO_TESTIMONIAL = {
+  youtubeId: "uP23Eu2PPh0",
+  name: "Arif",
+  role: "Owner",
+  company: "Beta Book Publishing",
+  caption:
+    "Arif, Owner of Beta Book Publishing, shares his experience working with TechMindsWithAhsan on his website build.",
+};
+
 export default function TestimonialsSlider() {
   const [current, setCurrent] = useState(0);
+  const [videoMuted, setVideoMuted] = useState(true);
+  const videoRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -51,6 +67,16 @@ export default function TestimonialsSlider() {
       (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
 
+  const toggleMute = () => {
+    if (videoRef.current) {
+      const command = videoMuted
+        ? '{"command":"unMute"}'
+        : '{"command":"mute"}';
+      videoRef.current.contentWindow?.postMessage(command, "*");
+    }
+    setVideoMuted(!videoMuted);
+  };
+
   return (
     <section className="py-24 bg-[#0A0A0A]">
       <div className="container mx-auto px-6">
@@ -63,6 +89,60 @@ export default function TestimonialsSlider() {
           </h2>
         </div>
 
+        {/* Video Testimonial */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="bg-[#111111] border border-gray-800 rounded-3xl overflow-hidden">
+            <div className="relative aspect-[9/16] sm:aspect-video max-h-[500px] mx-auto w-full max-w-[320px] sm:max-w-full">
+              <iframe
+                ref={videoRef}
+                src={`https://www.youtube.com/embed/${VIDEO_TESTIMONIAL.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${VIDEO_TESTIMONIAL.youtubeId}&controls=0&modestbranding=1&rel=0&playsinline=1`}
+                title={`${VIDEO_TESTIMONIAL.name} testimonial video`}
+                className="absolute inset-0 w-full h-full"
+                allow="autoplay; encrypted-media"
+              />
+              {/* Play / Unmute overlay */}
+              <button
+                onClick={toggleMute}
+                className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors group z-10"
+                aria-label={videoMuted ? "Unmute video" : "Mute video"}
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                    {videoMuted ? (
+                      <HiPlay className="w-8 h-8 text-white ml-1" />
+                    ) : (
+                      <svg
+                        className="w-8 h-8 text-white"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-white text-sm font-medium">
+                    {videoMuted ? "Tap to unmute" : "Tap to mute"}
+                  </span>
+                </div>
+              </button>
+            </div>
+            <div className="p-6 text-center">
+              <p className="text-gray-400 text-sm md:text-base italic">
+                {VIDEO_TESTIMONIAL.caption}
+              </p>
+              <div className="mt-3">
+                <h4 className="text-lg font-bold text-white">
+                  {VIDEO_TESTIMONIAL.name}
+                </h4>
+                <p className="text-[#0EA5E9]">
+                  {VIDEO_TESTIMONIAL.role}, {VIDEO_TESTIMONIAL.company}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Text Testimonials Slider */}
         <div className="max-w-4xl mx-auto relative">
           <div className="bg-[#111111] border border-gray-800 rounded-3xl p-8 md:p-16 relative overflow-hidden">
             <AnimatePresence mode="wait">
