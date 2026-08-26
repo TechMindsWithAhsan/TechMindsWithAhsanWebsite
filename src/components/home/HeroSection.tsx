@@ -22,7 +22,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A] pt-24">
+    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A] pt-20 md:pt-24">
       <Image
         src="/images/techmindswithahsan-banner.webp"
         alt="TechMindsWithAhsan - Building AI That Wins"
@@ -35,20 +35,20 @@ export default function HeroSection() {
       {/* Subtle vignette edges only — no darkening of the banner image itself */}
       <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(10,10,10,0.3)_100%)]" />
 
-      <div className="relative z-10 container mx-auto px-6 text-center">
+      <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-gray-700/60 bg-gray-900/70 backdrop-blur-md shadow-lg">
+          <div className="inline-block px-4 py-1.5 mb-4 md:mb-6 rounded-full border border-gray-700/60 bg-gray-900/70 backdrop-blur-md shadow-lg">
             <span className="text-sm font-medium text-gray-300">
               ✦ AI Engineer · Full-Stack Developer · Tech Founder
             </span>
           </div>
         </motion.div>
 
-        <div className="h-[120px] md:h-[150px] flex items-center justify-center mb-6">
+        <div className="h-[90px] md:h-[150px] flex items-center justify-center mb-4 md:mb-6">
           <AnimatePresence mode="wait">
             <motion.h1
               key={index}
@@ -56,7 +56,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight text-white"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight text-white"
               style={{
                 textShadow:
                   "0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.5)",
@@ -71,7 +71,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-100 mb-10 leading-relaxed"
+          className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-gray-100 mb-6 md:mb-10 leading-relaxed"
           style={{
             textShadow:
               "0 1px 3px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.7), 0 4px 16px rgba(0,0,0,0.5)",
