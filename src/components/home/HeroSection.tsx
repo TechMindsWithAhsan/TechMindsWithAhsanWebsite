@@ -22,7 +22,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A] pt-20 md:pt-24">
+    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center md:overflow-hidden bg-[#0A0A0A] pt-20 md:pt-24">
       <Image
         src="/images/techmindswithahsan-mobile-banner.webp"
         alt="TechMindsWithAhsan - Building AI That Wins"
