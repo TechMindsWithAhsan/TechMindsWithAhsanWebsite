@@ -60,7 +60,7 @@ export default function TestimonialsSlider() {
     (command: string) => {
       videoRef.current?.contentWindow?.postMessage(
         JSON.stringify({ event: "command", func: command, args: "" }),
-        window.location.origin,
+        "https://www.youtube.com",
       );
     },
     [],
