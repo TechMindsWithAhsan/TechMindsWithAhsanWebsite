@@ -7,24 +7,31 @@ import { HiStar, HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 const testimonials = [
   {
     quote:
-      "Working with Ahsan was a game changer for our startup. The AI integration he developed completely streamlined our operations and saved us hundreds of hours.",
-    name: "Sarah Jenkins",
-    role: "CEO",
-    company: "TechFlow Solutions",
+      "Every meeting felt like a masterclass in tech, and every delivery like magic. We brought the dream, they brought the code — now our app is profitable and successful in both international and domestic markets.",
+    name: "Rauff Ahmed",
+    role: "Client",
+    company: "Mobile App & Backend Development",
   },
   {
     quote:
-      "The technical expertise and strategic thinking Ahsan brought to our project were unmatched. Our web platform handles our growing user base flawlessly.",
-    name: "Michael Chen",
-    role: "Founder",
-    company: "GrowthMatrix",
+      "I was blown away by their unique approach to digital branding. Their content isn't just attractive — it connects. Their human-first, AI-powered strategies helped our brand go from invisible to irresistible.",
+    name: "Abdul Hameed's Furniture",
+    role: "Client",
+    company: "Digital Branding",
   },
   {
     quote:
-      "EDUCTECH is a phenomenal achievement. The accuracy and care put into the AI architecture demonstrate a deep understanding of both technology and domain requirements.",
-    name: "Dr. Ahmed Hassan",
-    role: "Director of Education",
-    company: "Islamic Heritage Institute",
+      "Their approach was not just about coding — it was about understanding the heart of the brand and building technology that speaks to people, not just machines. Every line of code feels like a step toward business growth.",
+    name: "New Gen Fashion",
+    role: "Client",
+    company: "E-Commerce & Brand Development",
+  },
+  {
+    quote:
+      "Unbelievable results achieved by TechMindsWithAhsan, helping our team scale through their services in a small period of time. High level of expertise, skills, and strategic analysis.",
+    name: "Occasion Odyssey",
+    role: "Events Management & Catering",
+    company: "Karachi",
   },
 ];
 
