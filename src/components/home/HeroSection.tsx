@@ -22,7 +22,7 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center md:overflow-hidden bg-[#0A0A0A] pt-20 md:pt-24">
+    <section className="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0A0A0A] pt-20 md:pt-24">
       <Image
         src="/images/techmindswithahsan-mobile-banner.webp"
         alt="TechMindsWithAhsan - Building AI That Wins"
@@ -30,7 +30,7 @@ export default function HeroSection() {
         priority
         quality={85}
         sizes="100vw"
-        className="z-0 object-contain block md:hidden"
+        className="z-0 object-cover block md:hidden"
       />
       <Image
         src="/images/techmindswithahsan-banner.webp"
