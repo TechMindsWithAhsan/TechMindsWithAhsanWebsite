@@ -30,7 +30,7 @@ export default function HeroSection() {
         priority
         quality={85}
         sizes="100vw"
-        className="z-0 object-cover object-center"
+        className="z-0 object-cover object-[25%_center] sm:object-center"
       />
       {/* Subtle vignette edges only — no darkening of the banner image itself */}
       <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(10,10,10,0.3)_100%)]" />
