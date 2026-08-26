@@ -56,7 +56,11 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]"
+              className="text-5xl md:text-7xl font-bold tracking-tight text-white"
+              style={{
+                textShadow:
+                  "0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.5)",
+              }}
             >
               {headlines[index]}
             </motion.h1>
@@ -67,7 +71,11 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 mb-10 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
+          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-100 mb-10 leading-relaxed"
+          style={{
+            textShadow:
+              "0 1px 3px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.7), 0 4px 16px rgba(0,0,0,0.5)",
+          }}
         >
           Transforming bold ideas into intelligent digital products. From
           advanced AI automation to scalable SaaS platforms, I engineer
