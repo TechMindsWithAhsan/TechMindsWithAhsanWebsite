@@ -26,7 +26,7 @@ const brands = [
   },
   {
     name: "LabTechCrew",
-    assets: ["/images/labtechcrew-logo.png"],
+    assets: ["/images/labtechcrew-logo.png?v=2"],
     accent: "text-violet-300",
   },
 ];
