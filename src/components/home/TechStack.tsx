@@ -1,7 +1,6 @@
 'use client';
 
 import FadeIn from '@/components/ui/FadeIn';
-import type { Variants } from 'framer-motion';
 
 const categories = [
   {
@@ -26,19 +25,6 @@ const categories = [
   }
 ];
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.05 },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.4 } },
-};
-
 export default function TechStack() {
   return (
     <section className="py-24 bg-[#111111] border-y border-gray-900">
@@ -56,15 +42,14 @@ export default function TechStack() {
               <div className="md:w-64 flex-shrink-0">
                 <h4 className="text-lg font-bold text-gray-300">{category.name}</h4>
               </div>
-              <FadeIn variants={containerVariants} className="flex flex-wrap justify-start items-start gap-3 w-full md:flex-1">
+              <FadeIn className="flex flex-wrap justify-start items-start gap-3 w-full md:flex-1">
                 {category.techs.map((tech) => (
-                  <FadeIn
+                  <span
                     key={tech}
-                    variants={itemVariants}
                     className="px-4 py-2 bg-gray-900 border border-gray-800 rounded-full text-sm font-medium text-gray-300 hover:border-[#0EA5E9] hover:text-white transition-colors cursor-default"
                   >
                     {tech}
-                  </FadeIn>
+                  </span>
                 ))}
               </FadeIn>
             </div>
