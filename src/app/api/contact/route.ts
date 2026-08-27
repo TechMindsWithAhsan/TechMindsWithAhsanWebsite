@@ -11,6 +11,51 @@ function getResend() {
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://techmindswithahsan.com";
 
+// Build the allowlist of origins that may POST to this endpoint. Accepts the
+// custom domain (NEXT_PUBLIC_SITE_URL) plus every Vercel deployment URL
+// (production .vercel.app URL, preview URL, and the custom-domain alias).
+// VERCEL_PROJECT_PRODUCTION_URL / VERCEL_URL are injected automatically on
+// Vercel — no manual configuration required — so this works on the .vercel.app
+// production URL, preview deployments, and the eventual custom domain without
+// ever disabling CSRF protection for arbitrary third-party origins.
+function getTrustedOrigins(): string[] {
+  const trusted = new Set<string>();
+  const add = (value: string) => {
+    try {
+      trusted.add(new URL(value).origin);
+    } catch {
+      /* ignore malformed URL */
+    }
+  };
+
+  add(SITE_URL);
+
+  for (const host of [
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    process.env.VERCEL_URL,
+  ]) {
+    if (host) add(`https://${host}`);
+  }
+
+  return [...trusted];
+}
+
+const TRUSTED_ORIGINS = getTrustedOrigins();
+
+function isTrustedOrigin(value: string): boolean {
+  return TRUSTED_ORIGINS.some((origin) => {
+    try {
+      return new URL(value).origin === origin;
+    } catch {
+      return false;
+    }
+  });
+}
+
+function isTrustedReferer(value: string): boolean {
+  return TRUSTED_ORIGINS.some((origin) => value.startsWith(origin));
+}
+
 interface ContactRequest {
   name?: unknown;
   email?: unknown;
@@ -76,14 +121,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // Origin / CSRF check — reject requests not originating from our own site
+    // Origin / CSRF check — reject requests whose Origin AND Referer both
+    // point to an origin outside the trusted allowlist (custom domain + Vercel
+    // deployment URLs). Requests with no Origin or no Referer (privacy-focused
+    // browsers, server-to-server calls) are allowed, as before.
     const origin = request.headers.get("origin");
     const referer = request.headers.get("referer");
-    const allowedOrigin = new URL(SITE_URL).origin;
-    if (
-      origin && origin !== allowedOrigin &&
-      referer && !referer.startsWith(allowedOrigin)
-    ) {
+    const originIsForeign = origin ? !isTrustedOrigin(origin) : false;
+    const refererIsForeign = referer ? !isTrustedReferer(referer) : false;
+    if (originIsForeign && refererIsForeign) {
       return NextResponse.json(
         { error: "Request blocked." },
         { status: 403 },
