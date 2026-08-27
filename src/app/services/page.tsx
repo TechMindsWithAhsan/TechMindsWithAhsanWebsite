@@ -14,6 +14,14 @@ export const metadata: Metadata = {
       "Explore AI automation, custom web development, AI products, marketing, SEO, and technology consulting from Ahsan Hayat.",
     url: "https://techmindswithahsan.com/services",
     type: "website",
+    images: [
+      {
+        url: "/images/techmindswithahsan-banner.webp",
+        width: 1200,
+        height: 630,
+        alt: "TechMindsWithAhsan",
+      },
+    ],
   },
 };
 

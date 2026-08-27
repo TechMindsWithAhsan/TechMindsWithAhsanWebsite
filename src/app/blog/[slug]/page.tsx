@@ -35,6 +35,14 @@ export async function generateMetadata({
         post?.excerpt || "Read the latest insights from TechMindsWithAhsan.",
       url: `https://techmindswithahsan.com/blog/${params.slug}`,
       type: "article",
+      images: [
+        {
+          url: "/images/techmindswithahsan-banner.webp",
+          width: 1200,
+          height: 630,
+          alt: "TechMindsWithAhsan",
+        },
+      ],
     },
   };
 }

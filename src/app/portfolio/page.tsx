@@ -12,6 +12,14 @@ export const metadata: Metadata = {
       "Explore EDUCTECH AI, custom web and mobile apps, Medical Imaging AI, Beta Book Publishing, and GearLab projects by Ahsan Hayat.",
     url: "https://techmindswithahsan.com/portfolio",
     type: "website",
+    images: [
+      {
+        url: "/images/techmindswithahsan-banner.webp",
+        width: 1200,
+        height: 630,
+        alt: "TechMindsWithAhsan",
+      },
+    ],
   },
 };
 

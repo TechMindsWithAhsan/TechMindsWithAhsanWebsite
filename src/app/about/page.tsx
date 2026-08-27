@@ -16,6 +16,14 @@ export const metadata: Metadata = {
       "Discover Ahsan Hayat's journey from digital marketing to AI engineering and technology leadership.",
     url: "https://techmindswithahsan.com/about",
     type: "profile",
+    images: [
+      {
+        url: "/images/techmindswithahsan-banner.webp",
+        width: 1200,
+        height: 630,
+        alt: "TechMindsWithAhsan",
+      },
+    ],
   },
 };
 

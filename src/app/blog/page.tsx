@@ -13,6 +13,14 @@ export const metadata: Metadata = {
       "Insights on AI engineering, startup technology, YouTube automation, and digital growth from Ahsan Hayat.",
     url: "https://techmindswithahsan.com/blog",
     type: "website",
+    images: [
+      {
+        url: "/images/techmindswithahsan-banner.webp",
+        width: 1200,
+        height: 630,
+        alt: "TechMindsWithAhsan",
+      },
+    ],
   },
 };
 

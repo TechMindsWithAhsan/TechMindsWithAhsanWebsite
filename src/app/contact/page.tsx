@@ -14,6 +14,14 @@ export const metadata: Metadata = {
       "Start a conversation with Ahsan Hayat about AI automation, software development, or digital growth.",
     url: "https://techmindswithahsan.com/contact",
     type: "website",
+    images: [
+      {
+        url: "/images/techmindswithahsan-banner.webp",
+        width: 1200,
+        height: 630,
+        alt: "TechMindsWithAhsan",
+      },
+    ],
   },
 };
 
