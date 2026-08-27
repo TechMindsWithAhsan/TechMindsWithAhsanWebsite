@@ -220,13 +220,17 @@ export default function ContactForm() {
               className="w-full bg-[#0A0A0A] border border-gray-800 rounded-lg py-3 px-4 text-white focus:outline-none focus:border-[#0EA5E9] focus:ring-1 focus:ring-[#0EA5E9] transition-all appearance-none"
             >
               <option value="">Select Budget Range</option>
-              <option value="Under $2,000">Under $2,000</option>
-              <option value="$2,000 to $5,000">$2,000 to $5,000</option>
-              <option value="$5,000 to $10,000">$5,000 to $10,000</option>
-              <option value="$10,000 to $25,000">$10,000 to $25,000</option>
-              <option value="$25,000+">$25,000+</option>
-              <option value="Not Sure Yet">Not Sure Yet</option>
+              <option value="Under $500">Under $500</option>
+              <option value="$500 to $1,500">$500 to $1,500</option>
+              <option value="$1,500 to $3,000">$1,500 to $3,000</option>
+              <option value="$3,000 to $7,000">$3,000 to $7,000</option>
+              <option value="$7,000+">$7,000+</option>
+              <option value="Flexible / Let's Discuss">Flexible / Let&apos;s Discuss</option>
             </select>
+            <p className="mt-2 text-xs text-gray-500">
+              Every project size is welcome — tell us your budget and we&apos;ll find
+              a fit.
+            </p>
           </div>
         </div>
 
