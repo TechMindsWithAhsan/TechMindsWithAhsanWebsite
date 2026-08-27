@@ -43,12 +43,14 @@ const testimonials = [
 
 const YOUTUBE_VIDEO_ID = "uP23Eu2PPh0";
 const YOUTUBE_VIDEO_URL = `https://www.youtube.com/shorts/${YOUTUBE_VIDEO_ID}`;
-const THUMBNAIL_URL = `https://i.ytimg.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`;
+const MAXRES_THUMBNAIL = `https://i.ytimg.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`;
+const HQ_THUMBNAIL = `https://i.ytimg.com/vi/${YOUTUBE_VIDEO_ID}/hqdefault.jpg`;
 
 export default function TestimonialsSlider() {
   const [current, setCurrent] = useState(0);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoMuted, setVideoMuted] = useState(true);
+  const [thumbnailSrc, setThumbnailSrc] = useState(MAXRES_THUMBNAIL);
   const videoRef = useRef<HTMLIFrameElement>(null);
   const userInteractedRef = useRef(false);
 
@@ -85,6 +87,12 @@ export default function TestimonialsSlider() {
 
   const loadVideo = useCallback(() => {
     setVideoLoaded(true);
+  }, []);
+
+  const handleThumbnailError = useCallback(() => {
+    setThumbnailSrc((current) =>
+      current === MAXRES_THUMBNAIL ? HQ_THUMBNAIL : current,
+    );
   }, []);
 
   const next = () => setCurrent((prev) => (prev + 1) % testimonials.length);
@@ -126,12 +134,13 @@ export default function TestimonialsSlider() {
                   aria-label="Play testimonial video"
                 >
                   <Image
-                    src={THUMBNAIL_URL}
+                    src={thumbnailSrc}
                     alt="Arif testimonial video thumbnail"
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 320px, 100%"
                     priority
+                    onError={handleThumbnailError}
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors">
                     <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-transform">

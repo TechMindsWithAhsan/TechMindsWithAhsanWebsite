@@ -56,7 +56,7 @@ export default function TechStack() {
               <div className="md:w-64 flex-shrink-0">
                 <h4 className="text-lg font-bold text-gray-300">{category.name}</h4>
               </div>
-              <FadeIn variants={containerVariants} className="flex flex-wrap gap-3 flex-1">
+              <FadeIn variants={containerVariants} className="flex flex-wrap justify-start items-start gap-3 w-full md:flex-1">
                 {category.techs.map((tech) => (
                   <FadeIn
                     key={tech}
