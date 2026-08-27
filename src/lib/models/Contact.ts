@@ -5,12 +5,12 @@ export interface IContact extends Document {
   email: string;
   company?: string;
   budgetRange?:
-    | "Under $2,000"
-    | "$2,000 to $5,000"
-    | "$5,000 to $10,000"
-    | "$10,000 to $25,000"
-    | "$25,000+"
-    | "Not Sure Yet";
+    | "Under $500"
+    | "$500 to $1,500"
+    | "$1,500 to $3,000"
+    | "$3,000 to $7,000"
+    | "$7,000+"
+    | "Flexible / Let's Discuss";
   projectType?:
     | "AI Automation"
     | "Custom & Web Development"
@@ -45,12 +45,12 @@ const ContactSchema: Schema = new Schema({
   budgetRange: {
     type: String,
     enum: [
-      "Under $2,000",
-      "$2,000 to $5,000",
-      "$5,000 to $10,000",
-      "$10,000 to $25,000",
-      "$25,000+",
-      "Not Sure Yet",
+      "Under $500",
+      "$500 to $1,500",
+      "$1,500 to $3,000",
+      "$3,000 to $7,000",
+      "$7,000+",
+      "Flexible / Let's Discuss",
     ],
   },
   projectType: {
