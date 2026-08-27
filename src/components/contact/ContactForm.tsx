@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 
+// Upper bound on how long a submission may take. Guards against a hung
+// request leaving the submit button stuck on "Sending Message..." forever
+// (e.g. a backend that is slow to respond or never resolves).
+const SUBMIT_TIMEOUT_MS = 20000;
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -49,6 +54,7 @@ export default function ContactForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+        signal: AbortSignal.timeout(SUBMIT_TIMEOUT_MS),
       });
 
       if (response.ok) {
@@ -68,7 +74,13 @@ export default function ContactForm() {
       }
     } catch (submissionError) {
       console.error("Error submitting form:", submissionError);
-      setError("An error occurred. Please try again later.");
+      if (submissionError instanceof Error && submissionError.name === "TimeoutError") {
+        setError(
+          "The request timed out. Our server may be busy — please try again shortly.",
+        );
+      } else {
+        setError("An error occurred. Please try again later.");
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -38,6 +38,12 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      // Fail fast if the database can't be reached instead of letting the
+      // driver wait out its ~30s default server-selection timeout. Without
+      // this, a misconfigured/unreachable MONGODB_URI makes the contact
+      // endpoint hang for ~30 seconds before returning 500, leaving the
+      // submit button stuck on "Sending Message...".
+      serverSelectionTimeoutMS: 5000,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
