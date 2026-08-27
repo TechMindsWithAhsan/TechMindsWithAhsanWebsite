@@ -24,6 +24,11 @@ const brands = [
     assets: ["/images/beta-book-publishing-logo.png"],
     accent: "text-rose-300",
   },
+  {
+    name: "LabTechCrew",
+    assets: ["/images/labtechcrew-logo.png"],
+    accent: "text-violet-300",
+  },
 ];
 
 const useIsomorphicLayoutEffect =
