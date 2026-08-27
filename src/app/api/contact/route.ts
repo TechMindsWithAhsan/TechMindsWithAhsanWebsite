@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
 import connectDB from "@/lib/mongodb";
 import { Contact } from "@/lib/models/Contact";
+
+function getResend() {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  return new Resend(key);
+}
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://techmindswithahsan.com";
 
 interface ContactRequest {
   name?: unknown;
@@ -67,6 +76,20 @@ export async function POST(request: Request) {
       );
     }
 
+    // Origin / CSRF check — reject requests not originating from our own site
+    const origin = request.headers.get("origin");
+    const referer = request.headers.get("referer");
+    const allowedOrigin = new URL(SITE_URL).origin;
+    if (
+      origin && origin !== allowedOrigin &&
+      referer && !referer.startsWith(allowedOrigin)
+    ) {
+      return NextResponse.json(
+        { error: "Request blocked." },
+        { status: 403 },
+      );
+    }
+
     const body = (await request.json()) as ContactRequest;
 
     // Honeypot check: reject bot submissions filling the hidden website field
@@ -123,6 +146,41 @@ export async function POST(request: Request) {
       projectType,
       message,
     });
+
+    // Send notification email (non-blocking — log failure but never block the lead)
+    const resend = getResend();
+    if (resend) {
+      try {
+        const fields = [
+          { label: "Name", value: name },
+          { label: "Email", value: email },
+          company && { label: "Company", value: company },
+          projectType && { label: "Project Type", value: projectType },
+          budgetRange && { label: "Budget Range", value: budgetRange },
+        ].filter(Boolean) as { label: string; value: string }[];
+
+        const fieldRows = fields
+          .map((f) => `<strong>${f.label}:</strong> ${f.value}`)
+          .join("<br>");
+
+        await resend.emails.send({
+          from: "TechMindsWithAhsan <onboarding@resend.dev>",
+          to: "techmindswithahsan@gmail.com",
+          subject: `New lead from techmindswithahsan.com: ${name}`,
+          html: `
+            <h2>New Contact Form Submission</h2>
+            <p>${fieldRows}</p>
+            <br>
+            <strong>Message:</strong>
+            <p style="white-space:pre-wrap;">${message}</p>
+            <br>
+            <p style="color:#888;font-size:12px;">Submitted at ${new Date().toISOString()} from IP ${clientIp}</p>
+          `,
+        });
+      } catch (emailError) {
+        console.error("Failed to send contact notification email:", emailError);
+      }
+    }
 
     return NextResponse.json(
       { message: "Message received successfully." },
