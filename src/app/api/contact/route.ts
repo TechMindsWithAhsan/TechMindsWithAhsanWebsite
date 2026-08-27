@@ -210,7 +210,7 @@ export async function POST(request: Request) {
           .join("<br>");
 
         await resend.emails.send({
-          from: "TechMindsWithAhsan <onboarding@resend.dev>",
+          from: "TechMindsWithAhsan <leads@techmindswithahsan.com>",
           to: "techmindswithahsan@gmail.com",
           subject: `New lead from techmindswithahsan.com: ${name}`,
           html: `
