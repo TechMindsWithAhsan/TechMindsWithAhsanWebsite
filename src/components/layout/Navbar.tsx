@@ -113,7 +113,7 @@ export default function Navbar() {
               aria-label="TechMindsWithAhsan home"
             >
               <Image
-                src="/images/logo.png?v=3"
+                src="/images/logo.png?v=4"
                 alt="TechMindsWithAhsan"
                 width={58}
                 height={58}
