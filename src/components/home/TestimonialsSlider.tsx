@@ -247,6 +247,7 @@ export default function TestimonialsSlider() {
 
           <button
             onClick={prev}
+            aria-label="Previous testimonial"
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-6 w-12 h-12 bg-gray-900 border border-gray-800 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors z-10"
           >
             <HiChevronLeft className="w-6 h-6" />
@@ -254,6 +255,7 @@ export default function TestimonialsSlider() {
 
           <button
             onClick={next}
+            aria-label="Next testimonial"
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-6 w-12 h-12 bg-gray-900 border border-gray-800 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-colors z-10"
           >
             <HiChevronRight className="w-6 h-6" />
@@ -264,9 +266,16 @@ export default function TestimonialsSlider() {
           {testimonials.map((_, i) => (
             <button
               key={i}
+              type="button"
               onClick={() => setCurrent(i)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${i === current ? "bg-[#0EA5E9] w-6" : "bg-gray-700"}`}
-            />
+              aria-label={`Go to testimonial ${i + 1}`}
+              aria-current={i === current ? "true" : undefined}
+              className="p-2 -m-2 flex items-center justify-center"
+            >
+              <span
+                className={`block rounded-full transition-all duration-300 ${i === current ? "w-6 h-2 bg-[#0EA5E9]" : "w-2 h-2 bg-gray-700"}`}
+              />
+            </button>
           ))}
         </div>
       </div>

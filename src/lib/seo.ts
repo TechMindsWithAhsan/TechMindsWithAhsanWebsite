@@ -16,7 +16,7 @@ export function generateMetadata({
   title,
   description = BRAND.tagline,
   keywords = [],
-  image = "/images/logo.png?v=2",
+  image = "/images/logo.png?v=3",
   url = "https://techmindswithahsan.com",
   type = "website",
   author = BRAND.founder,
@@ -119,7 +119,7 @@ export function generateOrganizationSchema() {
     "@type": "Organization",
     name: BRAND.name,
     url: "https://techmindswithahsan.com",
-    logo: "https://techmindswithahsan.com/images/logo.png?v=2",
+    logo: "https://techmindswithahsan.com/images/logo.png?v=3",
     contactPoint: {
       "@type": "ContactPoint",
       telephone: BRAND.phone,
@@ -182,7 +182,7 @@ export function generateArticleSchema({
       name: BRAND.name,
       logo: {
         "@type": "ImageObject",
-        url: "https://techmindswithahsan.com/logo.png?v=2",
+        url: "https://techmindswithahsan.com/images/logo.png?v=3",
       },
     },
     datePublished: datePublished,

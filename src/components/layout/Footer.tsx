@@ -21,7 +21,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <Image
-                src="/images/logo.png?v=2"
+                src="/images/logo.png?v=3"
                 alt="TechMindsWithAhsan"
                 width={120}
                 height={120}
@@ -104,6 +104,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/techmindswithahsan/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="TechMindsWithAhsan LinkedIn"
                 className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-sky-600 transition-all"
               >
                 <FaLinkedin size={18} />
@@ -112,6 +113,7 @@ export default function Footer() {
                 href="https://www.facebook.com/TechMindsWithAhsan"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="TechMindsWithAhsan Facebook"
                 className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-blue-600 transition-all"
               >
                 <FaFacebook size={18} />
@@ -120,6 +122,7 @@ export default function Footer() {
                 href="https://www.instagram.com/techmindswithahsan/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="TechMindsWithAhsan Instagram"
                 className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-pink-600 transition-all"
               >
                 <FaInstagram size={18} />
@@ -128,6 +131,7 @@ export default function Footer() {
                 href="https://www.tiktok.com/@techmindswithahsan"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="TechMindsWithAhsan TikTok"
                 className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-black transition-all border border-transparent hover:border-white/20"
               >
                 <FaTiktok size={18} />
@@ -136,6 +140,7 @@ export default function Footer() {
                 href="https://www.youtube.com/@TechMindsWithAhsan"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="TechMindsWithAhsan YouTube"
                 className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center text-zinc-400 hover:text-white hover:bg-red-600 transition-all"
               >
                 <FaYoutube size={18} />
@@ -164,11 +169,11 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-zinc-500 text-sm text-center md:text-left">
+          <p className="text-zinc-400 text-sm text-center md:text-left">
             © {new Date().getFullYear()} TechMindsWithAhsan. All rights
             reserved. | Founded by Ahsan Hayat
           </p>
-          <div className="flex items-center gap-2 text-sm text-zinc-500">
+          <div className="flex items-center gap-2 text-sm text-zinc-400">
             <span>Built with</span>
             <span className="font-semibold text-white">Next.js</span>
           </div>

@@ -6,18 +6,13 @@ import Image from "next/image";
 const brands = [
   {
     name: "EDUCTECH",
-    assets: ["/images/eductech-logo.png"],
+    assets: ["/images/eductech-logo.png?v=2"],
     accent: "text-sky-300",
   },
   {
     name: "GearLab",
-    assets: ["/images/gearlab-logo.png"],
+    assets: ["/images/gearlab-logo.png?v=2"],
     accent: "text-amber-300",
-  },
-  {
-    name: "Medical Diagnosis",
-    assets: [],
-    accent: "text-emerald-300",
   },
   {
     name: "Beta Book Publishing",
@@ -186,7 +181,7 @@ export default function BrandLogoRail() {
         aria-label="Brands and products built by TechMindsWithAhsan"
       >
         <div className="container mx-auto mb-4 flex items-center justify-between px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
             Trusted product work
           </p>
           <span className="hidden text-xs text-zinc-600 sm:block">
@@ -209,9 +204,9 @@ export default function BrandLogoRail() {
       aria-label="Brands and products built by TechMindsWithAhsan"
     >
       <div className="container mx-auto mb-4 flex items-center justify-between px-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-500">
-          Trusted product work
-        </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-400">
+            Trusted product work
+          </p>
         <span className="hidden text-xs text-zinc-600 sm:block">
           Selected client brands
         </span>

@@ -56,7 +56,7 @@ export default function SkillsShowcase() {
                 <span className="w-2 h-2 rounded-full bg-[#F59E0B]" />
                 {category.title}
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap justify-start gap-x-3 gap-y-3">
                 {category.skills.map((skill, sIndex) => (
                   <span
                     key={sIndex}
