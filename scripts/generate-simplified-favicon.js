@@ -46,89 +46,116 @@ async function createICO(pngBuffers, sizes) {
   return ico;
 }
 
+async function makeFavicon(srcBuffer, size) {
+  // Step 1: Resize to target
+  const resized = await sharp(srcBuffer)
+    .resize(size, size, { fit: 'fill', kernel: 'lanczos3' })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const ch = resized.info.channels;
+  const pxCount = size * size;
+  const outData = Buffer.alloc(pxCount * ch);
+
+  // Step 2: For each pixel, force alpha to 0 or 255 (binary alpha)
+  // Also sample RGB from the center of the brain (average of non-transparent source pixels)
+  let opqCount = 0;
+  for (let i = 0; i < pxCount; i++) {
+    const a = resized.data[i * ch + 3];
+    outData[i * ch + 0] = resized.data[i * ch + 0]; // R
+    outData[i * ch + 1] = resized.data[i * ch + 1]; // G
+    outData[i * ch + 2] = resized.data[i * ch + 2]; // B
+    outData[i * ch + 3] = a > 30 ? 255 : 0;          // Binary alpha threshold
+    if (a > 30) opqCount++;
+  }
+
+  const buf = await sharp(outData, {
+    raw: { width: size, height: size, channels: ch },
+  }).png().toBuffer();
+
+  return { buf, opqCount };
+}
+
 async function main() {
-  console.log('=== Step 1: Extract brain-only region from logo ===');
-
-  // The brain occupies roughly rows 35-285, columns ~29-470
-  // Extract that region with tight crop
-  const brainBuffer = await sharp(LOGO)
+  console.log('=== Step 1: Extract brain + force opaque ===');
+  const { data: rawBrain, info } = await sharp(LOGO)
     .extract({ left: 29, top: 35, width: 442, height: 255 })
-    .toBuffer();
-  console.log('Extracted brain region: 442x255');
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
 
-  // Save a preview of the extracted brain
-  fs.writeFileSync(path.join(__dirname, 'brain-extracted.png'), brainBuffer);
+  const w = info.width, h = info.height, ch = info.channels;
+  const opaqueData = Buffer.alloc(w * h * ch);
+  for (let i = 0; i < w * h; i++) {
+    opaqueData[i * ch + 0] = rawBrain[i * ch + 0];
+    opaqueData[i * ch + 1] = rawBrain[i * ch + 1];
+    opaqueData[i * ch + 2] = rawBrain[i * ch + 2];
+    opaqueData[i * ch + 3] = rawBrain[i * ch + 3] > 0 ? 255 : 0;
+  }
+  const opaqueBrain = await sharp(opaqueData, {
+    raw: { width: w, height: h, channels: ch },
+  }).png().toBuffer();
+  console.log('Brain made fully opaque:', w + 'x' + h);
 
-  console.log('\n=== Step 2: Create simplified high-contrast brain icon ===');
-
-  // For favicon, we need a square canvas. Place brain centered on transparent bg.
-  // The brain is ~442x255, so we'll pad to make it square (442x442) with brain centered.
-  const brainMeta = await sharp(brainBuffer).metadata();
-  const canvasSize = Math.max(brainMeta.width, brainMeta.height);
-  const padX = Math.floor((canvasSize - brainMeta.width) / 2);
-  const padY = Math.floor((canvasSize - brainMeta.height) / 2);
-
-  // Create square canvas with brain centered, then boost contrast and sharpen
-  const squareBrain = await sharp(brainBuffer)
-    .resize(canvasSize, canvasSize, {
+  console.log('\n=== Step 2: Create square canvas ===');
+  const squareBrain = await sharp(opaqueBrain)
+    .resize(442, 442, {
       fit: 'contain',
       background: { r: 0, g: 0, b: 0, alpha: 0 },
       position: 'center',
     })
-    .linear(1.3, -20)   // boost contrast: increase gain, reduce offset
-    .sharpen({ sigma: 0.5 })
     .png()
     .toBuffer();
 
-  fs.writeFileSync(path.join(__dirname, 'brain-square.png'), squareBrain);
-  console.log('Created square brain canvas:', canvasSize + 'x' + canvasSize);
-
-  console.log('\n=== Step 3: Generate optimized favicon sizes ===');
-
+  console.log('\n=== Step 3: Generate favicons with binary alpha ===');
   const faviconSizes = [16, 32, 48];
   const pngBuffers = [];
 
   for (const size of faviconSizes) {
-    const buf = await sharp(squareBrain)
-      .resize(size, size, {
-        fit: 'contain',
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
-        kernel: 'lanczos3',
-      })
-      .png()
-      .toBuffer();
+    const { buf, opqCount } = await makeFavicon(squareBrain, size);
+    console.log(`  ${size}x${size}: ${buf.length} bytes, ${opqCount}/${size*size} opaque`);
     pngBuffers.push(buf);
-    console.log(`  ${size}x${size}: ${buf.length} bytes`);
   }
 
-  // Also generate 192x192 for public/favicons (android)
   const buf192 = await sharp(squareBrain)
-    .resize(192, 192, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 }, kernel: 'lanczos3' })
-    .png()
-    .toBuffer();
-  console.log('  192x192:', buf192.length, 'bytes');
+    .resize(192, 192, { fit: 'fill', kernel: 'lanczos3' })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const ch192 = buf192.info.channels;
+  const out192 = Buffer.alloc(192 * 192 * ch192);
+  for (let i = 0; i < 192 * 192; i++) {
+    out192[i * ch192 + 0] = buf192.data[i * ch192 + 0];
+    out192[i * ch192 + 1] = buf192.data[i * ch192 + 1];
+    out192[i * ch192 + 2] = buf192.data[i * ch192 + 2];
+    out192[i * ch192 + 3] = buf192.data[i * ch192 + 3] > 30 ? 255 : 0;
+  }
+  const buf192png = await sharp(out192, {
+    raw: { width: 192, height: 192, channels: ch192 },
+  }).png().toBuffer();
+  console.log('  192x192:', buf192png.length, 'bytes');
 
-  console.log('\n=== Step 4: Write favicon files ===');
-
-  // icon.png = 32x32 (Next.js auto-resizes for <link rel="icon">)
+  console.log('\n=== Step 4: Write files ===');
   fs.writeFileSync(path.join(OUT_APP, 'icon.png'), pngBuffers[1]);
-  console.log('Written: src/app/icon.png (32x32)');
+  console.log('Written: src/app/icon.png');
 
-  // favicon.ico = multi-resolution (16+32+48)
   const icoBuf = await createICO(pngBuffers, faviconSizes);
   fs.writeFileSync(path.join(OUT_APP, 'favicon.ico'), icoBuf);
-  console.log('Written: src/app/favicon.ico (16+32+48 multi-res)');
+  console.log('Written: src/app/favicon.ico');
 
-  // public/favicons/
   const OUT_PUBLIC = path.join(__dirname, '..', 'public', 'favicons');
   fs.writeFileSync(path.join(OUT_PUBLIC, 'favicon-16x16.png'), pngBuffers[0]);
   fs.writeFileSync(path.join(OUT_PUBLIC, 'favicon-32x32.png'), pngBuffers[1]);
-  fs.writeFileSync(path.join(OUT_PUBLIC, 'android-chrome-192x192.png'), buf192);
-  console.log('Written: public/favicons/ variants');
+  fs.writeFileSync(path.join(OUT_PUBLIC, 'android-chrome-192x192.png'), buf192png);
+  console.log('Written: public/favicons/');
 
-  console.log('\n=== Done! ===');
-  console.log('Brain-only icon (no text, tightly cropped, high contrast)');
-  console.log('apple-icon.png left untouched (full-detail at 180x180)');
+  // Debug
+  fs.writeFileSync(path.join(__dirname, 'debug-icon-32.png'), pngBuffers[1]);
+  fs.writeFileSync(path.join(__dirname, 'debug-icon-16.png'), pngBuffers[0]);
+  console.log('Written: scripts/debug-*.png');
+
+  console.log('\nDone!');
 }
 
 main().catch(err => { console.error(err); process.exit(1); });
